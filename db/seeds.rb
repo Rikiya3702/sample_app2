@@ -5,13 +5,25 @@ User.create!(name:  "Example User",
              admin:     true,
              activated: true,
              activated_at: Time.zone.now)
-                          
+
+require 'faker/okinawa'
+
 99.times do |n|
-  name  = Faker::Name.name
+  # name  = Faker::Okinawa::Name.last_name
+  name  = Faker::Okinawa::Name.last_name + "(#{n.to_s})"
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
   User.create!(name:  name,
                email: email,
                password:              password,
-               password_confirmation: password)
+               password_confirmation: password,
+               admin:     false,
+               activated: true,
+               activated_at: Time.zone.now)
+end
+
+users = User.order(:created_at).take(6)
+50.times do
+  content = Faker::Okinawa::Base.name + Faker::Okinawa::Address.city
+  users.each { |user| user.microposts.create!(content: content) }
 end
